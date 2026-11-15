@@ -1,0 +1,57 @@
+examples:
+  - id: full-pipeline
+    title:
+      zh: 一站式补全综述全文
+      en: One-stop full-text completion for a review
+    description:
+      zh: 扫描 Zotero 综述分类，筛出无 PDF 的非开源文献，经青梨AI批量下载后挂回 Zotero
+      en: Scan a Zotero collection, filter non-OA papers without PDFs, batch-download via Qingli delivery, and attach back to Zotero
+    prompt:
+      zh: |-
+        用 qzf 帮我把 Zotero 分类 {{分类 key}} 里还没有 PDF 的非开源文献全部补全全文：
+        PDF 下载到 {{参考文献文件夹}}，下载完成后按 Zotero 惯例重命名并以全文链接挂回对应条目。
+      en: |-
+        Use qzf to complete full texts for all non-OA papers without PDFs in my Zotero collection {{collection key}}:
+        download PDFs into {{reference folder}}, rename them Zotero-style, and attach them back to the corresponding items as linked files.
+  - id: scan-collection
+    title:
+      zh: 扫描分类并筛非开源条目
+      en: Scan collection and filter non-OA items
+    description:
+      zh: 对指定 Zotero 分类做 PDF 附件清点 + Unpaywall 开源判定，生成下载候选清单
+      en: Audit PDF attachments in a Zotero collection and check Unpaywall OA status to build a download candidate list
+    prompt:
+      zh: |-
+        扫描我的 Zotero 分类 {{分类 key}}，列出其中既没有 PDF 附件、也不是开源（Unpaywall is_oa=false）的条目，
+        生成候选清单文件；{{可选：优先下载的 DOI 列表文件}}。
+      en: |-
+        Scan my Zotero collection {{collection key}} and list items that have neither a PDF attachment nor open access (Unpaywall is_oa=false);
+        generate a candidate list file. {{optional: priority DOI list file}}
+  - id: submit-batch
+    title:
+      zh: 批量提交 DOI 到青梨
+      en: Batch-submit DOIs to Qingli
+    description:
+      zh: 把 DOI 清单分批（每批 ≤10 条）提交到青梨AI文献传递，登录态已持久化无需重复扫码
+      en: Submit a DOI list to Qingli delivery in batches of ≤10; login state is persisted, no re-scan needed
+    prompt:
+      zh: |-
+        把这份 DOI 清单提交到青梨：{{DOI 文件路径或逗号分隔清单}}。
+        每批 10 条分批提交，提交后开始轮询下载。
+      en: |-
+        Submit this DOI list to Qingli delivery: {{DOI file path or comma-separated list}}.
+        Submit in batches of 10, then start polling and downloading.
+  - id: sync-and-attach
+    title:
+      zh: 收取下载并挂回 Zotero
+      en: Fetch deliveries and attach back to Zotero
+    description:
+      zh: 轮询青梨已完成的传递，下载 PDF 到文献文件夹并重命名，再以 linked_file 挂回 Zotero 条目
+      en: Poll completed Qingli deliveries, download PDFs to the reference folder, rename Zotero-style, and attach as linked files
+    prompt:
+      zh: |-
+        收取青梨上已完成的文献传递：下载到 {{参考文献文件夹}}，按 Zotero 惯例重命名，
+        并把全文链接挂到 Zotero 对应条目上。
+      en: |-
+        Fetch completed Qingli deliveries: download PDFs into {{reference folder}}, rename Zotero-style,
+        and attach full-text links to the corresponding Zotero items.

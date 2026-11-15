@@ -35,7 +35,6 @@ Zotero 10 本地 API 写操作需要授权。**弹窗有三个选项：「允许
 ## 工作流（标准顺序）
 
 ```bash
-S=~/appdata/roaming  # 示例；实际按用户项目路径传入
 QZF="python <skill>/scripts/qzf.py"
 DATA=<项目>/qzf-state          # manifest.json / scan.json 存放处
 PDF=<项目>/参考文献/pdfs        # PDF 归档目录
