@@ -1,0 +1,14 @@
+# 运行态（勿提交）
+.qzf/
+qzf-state/
+manifest.json
+scan.json
+*.png
+__pycache__/
+*.pyc
+profile/
+downloads/
+
+# 授权与凭证（等同改库权限，严禁入库）
+localAPIKeys.json
+*key*.json
