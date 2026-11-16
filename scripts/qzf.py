@@ -376,7 +376,12 @@ def cmd_sync(args):
                 if key in man and (dest / man[key]).exists():
                     continue
                 try:
-                    resp = requests.get(url, timeout=180)
+                    # 下载服务器（*.newacademic.net:7014）拦截无浏览器 UA 的请求（403, 153B HTML），
+                    # 必须携带登录态浏览器同款 UA + Referer
+                    resp = requests.get(url, timeout=180, headers={
+                        "User-Agent": cap.get("ua", "Mozilla/5.0"),
+                        "Referer": QINGLI_BASE + "/",
+                    }, cookies=cap.get("cookies", {}))
                 except Exception as e:
                     print(f"  FAIL 请求异常 {doi}: {e}", flush=True)
                     continue
