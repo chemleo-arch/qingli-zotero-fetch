@@ -356,8 +356,16 @@ def cmd_sync(args):
                 ext = ".pdf" if ".pdf" in low else (".caj" if ".caj" in low else ".bin")
                 if args.doi_names and doi.lower().startswith("10."):
                     dl = doi.lower()
+                    # 去重三重判定（2026-11-16 加固）：
+                    # ① map 精确键 → 文件存在；② map 大小写不敏感扫描（防键形态漂移）；
+                    # ③ DOI 命名文件直接存在。任一命中即跳过下载。
                     mapped = doi_map.get(dl)
                     if mapped and (dest / mapped).exists():
+                        continue
+                    hit = next((v for k, v in doi_map.items()
+                                if k.lower() == dl and (dest / v).exists()), None)
+                    if hit:
+                        doi_map[dl] = hit
                         continue
                     name = doi_file_name(doi) + ext
                     if (dest / name).exists():
@@ -389,7 +397,13 @@ def cmd_sync(args):
                     (dest / name).write_bytes(resp.content)
                     man[key] = name
                     if doi.lower().startswith("10."):
-                        doi_map[doi.lower()] = name
+                        old = doi_map.get(doi.lower())
+                        if old and (dest / old).exists():
+                            # 已有指向存在文件的 map 条目（如 attach 改名后的正式名），
+                            # 不回写 DOI 命名覆盖之
+                            print(f"  [map] 保留 {doi} -> {old}", flush=True)
+                        else:
+                            doi_map[doi.lower()] = name
                     n_new += 1
                     print(f"  OK  {doi} -> {name} ({len(resp.content)//1024} KB)", flush=True)
                 else:
